@@ -187,9 +187,9 @@ namespace CurrencyFormApp
             this.label5.AutoSize = true;
             this.label5.Location = new System.Drawing.Point(543, 126);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(35, 13);
+            this.label5.Size = new System.Drawing.Size(111, 13);
             this.label5.TabIndex = 14;
-            this.label5.Text = "label5";
+            this.label5.Text = "Result of convertation";
             // 
             // Form1
             // 
