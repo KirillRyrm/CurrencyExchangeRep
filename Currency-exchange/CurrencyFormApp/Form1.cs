@@ -10,6 +10,7 @@ namespace CurrencyFormApp
 {
     public partial class Form1 : Form
     {
+        Dictionary<string, double> rates = new Dictionary<string, double> ();
         public Form1()
         {
             InitializeComponent();
@@ -17,22 +18,31 @@ namespace CurrencyFormApp
 
         private void Form1_Load(object sender, EventArgs e)
         {
-
+            List<CurrencyRate> ratesList = GetRates();
+            foreach (CurrencyRate rate in ratesList)
+            {
+                rates.Add(rate.cc, rate.rate);
+            }
+            FillComboBoxes(ratesList);
         }
 
         private void buttonDownload_Click(object sender, EventArgs e)
         {
+            
+            // 
+            FillCurrencyList(GetRates());
+        }
+
+        private List<CurrencyRate> GetRates() {
             string date = dateTimePickerCurrencyDate.Value.ToString("yyyyMMdd");
             string URI = $"https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?date={date}&json";
-            
+
             // 
             string webResponseString = MyLib.Web.GetWebContent(URI);
 
             // Список объектов типа CurrencyRate
             List<CurrencyRate> currRates = JsonConvert.DeserializeObject<List<CurrencyRate>>(webResponseString);
-
-            // 
-            FillCurrencyList(currRates);
+            return currRates;
         }
 
         string GetWebContent(string UriString)
@@ -89,5 +99,46 @@ namespace CurrencyFormApp
         {
 
         }
+        void FillComboBoxes(List<CurrencyRate> currRates)
+        {
+            comboBox1.Items.Clear();
+            comboBox2.Items.Clear();
+
+            foreach (var item in currRates)
+            {
+                comboBox1.Items.Add(item.cc);
+                comboBox2.Items.Add(item.cc);
+            }
+
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                double a;
+                rates.TryGetValue(comboBox1.SelectedItem.ToString(), out a);
+                double b;
+                rates.TryGetValue(comboBox2.SelectedItem.ToString(), out b);
+                double c = Convert.ToDouble(textBox1.Text);
+                label5.Text = Convert.ToString(a / b * c);
+            } catch { }
+        }
+
+        private void textBox1_TextChanged_1(object sender, EventArgs e)
+        {
+
+        }
     }
 }
+        
